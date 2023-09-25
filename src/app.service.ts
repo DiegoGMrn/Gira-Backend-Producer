@@ -14,9 +14,9 @@ export class AppService {
   }*/
   async create(createCatDto: CreateCatDto) {
     const cat = this.catRepository.create(createCatDto)
-    this.catRepository.save(cat)
-    //return await this.catRepository.save(cat);
-    return this.client.send({ cmd: 'createcats'}, 'AGREGADO');
+    //this.catRepository.save(cat)
+    return await this.catRepository.save(cat);
+    //return this.client.send({ cmd: 'createcats'}, 'AGREGADO');
   }
   
   async getCatName(name: string){
@@ -29,6 +29,7 @@ export class AppService {
   async findAll() {
     return await this.catRepository.find();
   }
+  
   
   
 }

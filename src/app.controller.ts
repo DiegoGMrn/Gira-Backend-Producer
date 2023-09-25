@@ -2,6 +2,7 @@ import { Body,Controller, Get ,Post} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Cats } from './dtos/cat.dtos';
 import { CreateCatDto } from './dtos/create-cat-dto';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -28,6 +29,15 @@ export class AppController {
   }
   @Post('/createcats')
   create(@Body() createCatDto: CreateCatDto){
+    console.log('OK');
     return this.appService.create(createCatDto);
+  }
+  @EventPattern('new_cat_created')
+    async handleNewCatCreated(newCat: Cats) {
+    // Realiza el manejo del evento aquí
+    console.log('Nuevo gato creado:', newCat);
+    await this.appService.create(newCat);
+
+    
   }
 }
