@@ -3,15 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Transport, ClientsModule } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cats } from './dtos/cat.dtos'
+import { Users } from './dtos/user.dtos'
 @Module({
   imports: [ClientsModule.register([
     {
-      name: 'CATS_SERVICE',
+      name: 'USERS_SERVICE',
       transport: Transport.RMQ,
       options: {
         urls: ['amqp://localhost:5672'],
-        queue: 'cats_queue',
+        queue: 'users_queue',
         queueOptions: {
           durable: false
         },
@@ -26,7 +26,7 @@ import { Cats } from './dtos/cat.dtos'
     database: 'db_crud',
     autoLoadEntities:true,
     synchronize: true,
-  }),TypeOrmModule.forFeature([Cats]) ],
+  }),TypeOrmModule.forFeature([Users]) ],
   controllers: [AppController],
   providers: [AppService],
 })
