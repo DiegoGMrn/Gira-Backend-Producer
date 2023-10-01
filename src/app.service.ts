@@ -13,11 +13,15 @@ export class AppService {
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user); // Espera a que se complete
-    //console.log(savedUser)
     return savedUser; // Devuelve el usuario guardado
   }
   
-  
+  async findUser(correo: string, clave: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { correo, clave } });
+    const user1 = !!user;
+    console.log(user1);
+    return user1;
+  }
   
   
 }
