@@ -30,7 +30,7 @@ export class AppController {
         const { correo, clave } = newUser;
         const userExists = await this.appService.findUser(correo, clave);
         console.log(userExists)
-        
+        return userExists
       } 
     }
     

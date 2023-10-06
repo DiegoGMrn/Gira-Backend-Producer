@@ -13,6 +13,7 @@ export class AppService {
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user); // Espera a que se complete
+    console.log(savedUser)
     return savedUser; // Devuelve el usuario guardado
   }
   
