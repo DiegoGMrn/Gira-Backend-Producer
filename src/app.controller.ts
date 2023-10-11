@@ -24,7 +24,7 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
-  
+    /*
     @EventPattern('login_user')
     async handleLoginUser(newUser: Partial<Users>) {
       if (newUser.correo && newUser.clave) {
@@ -33,7 +33,7 @@ export class AppController {
         //console.log(userExists)
         return userExists
       } 
-    }
+    }*/
 
     ///////////////////////////////////////// TEST JWT ////////////////////////////////////////////
 

@@ -18,13 +18,13 @@ export class AppService {
     console.log(savedUser)
     return savedUser; // Devuelve el usuario guardado
   }
-  
+  /*
   async findUser(correo: string, clave: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { correo, clave } });
     const user1 = !!user;
     console.log("asd",user1);
     return user1;
-  }
+  }*/
 
 
 
@@ -38,11 +38,10 @@ export class AppService {
   }
 
   generateAccessToken(user: Partial<Users>): string {
-    // Aquí debes implementar la lógica para generar el token JWT
-    // Puedes utilizar el JwtService para generar el token con la información necesaria
-    const payload = { correo: user.correo, /* otros datos que desees incluir */ };
-    const accessToken = this.jwtService.sign(payload);
-    return accessToken; // Devuelve solo la cadena del token JWT, no otros valores
+    const expiresIn = 3600;
+    const payload = { correo: user.correo, };
+    const accessToken = this.jwtService.sign(payload, { expiresIn });
+    return accessToken;
   }
 
 
