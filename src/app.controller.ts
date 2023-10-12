@@ -24,35 +24,46 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
-    /*
-    @EventPattern('login_user')
-    async handleLoginUser(newUser: Partial<Users>) {
-      if (newUser.correo && newUser.clave) {
-        const { correo, clave } = newUser;
-        const userExists = await this.appService.findUser(correo, clave);
-        //console.log(userExists)
-        return userExists
-      } 
-    }*/
+    ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
+    @EventPattern('update_pass_user')
+    async handleUpdatePassUser(data: { oldpass: string, newpass: string, correo: string }) {
+      const { oldpass, newpass, correo } = data;
+      
+      if (oldpass && newpass && correo) {
+        const resp = await this.appService.updatePassword(correo,oldpass,newpass)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+
+
+
+
+
+
+
+    ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
+   
 
     ///////////////////////////////////////// TEST JWT ////////////////////////////////////////////
 
     @EventPattern('login_user1')
-  async handleLoginUserTest(newUser: Partial<Users>) {
-    if (newUser.correo && newUser.clave) {
-      const { correo, clave } = newUser;
-      const user = await this.appService.findUserTest(correo, clave);
-      if (user) {
-        // Si el usuario existe y las credenciales son válidas, genera un token JWT
-        const token = this.appService.generateAccessToken(newUser);
-        //console.log(token);
-        return token;
-      } else {
-        //this.logger.error('Credenciales incorrectas');
-        return null;
+    async handleLoginUserTest(newUser: Partial<Users>) {
+      if (newUser.correo && newUser.clave) {
+        const { correo, clave } = newUser;
+        const user = await this.appService.findUserTest(correo, clave);
+        if (user) {
+          // Si el usuario existe y las credenciales son válidas, genera un token JWT
+          const token = this.appService.generateAccessToken(newUser);
+          //console.log(token);
+          return token;
+        } else {
+          //this.logger.error('Credenciales incorrectas');
+          return null;
+        }
       }
     }
-  }
     
   
 }

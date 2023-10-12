@@ -26,7 +26,23 @@ export class AppService {
     return user1;
   }*/
 
+   ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
+   async updatePassword(correo: string, claveAntigua: string, nuevaClave: string,): Promise<boolean> {
+    
+    const usuario = await this.userRepository.findOne({ where: { correo } });
+    
 
+    if(usuario && usuario.clave == claveAntigua){
+      usuario.clave = nuevaClave;
+      await this.userRepository.save(usuario);
+      
+      return true;
+    }
+    
+
+    return false;
+  }
+    ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
 
 
   ///////////////////////////////////////// TEST JWT ////////////////////////////////////////////
@@ -43,7 +59,7 @@ export class AppService {
     const accessToken = this.jwtService.sign(payload, { expiresIn });
     return accessToken;
   }
-
+   ///////////////////////////////////////// TEST JWT ////////////////////////////////////////////
 
 
 
