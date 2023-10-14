@@ -39,6 +39,7 @@ import { AppService } from './app.service';
 import { Transport, ClientsModule } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './dtos/user.dtos';
+import { Recovery } from './dtos/recovery.dtos';
 import { JwtModule } from '@nestjs/jwt'; // Asegúrate de importar JwtModule
 
 @Module({
@@ -66,7 +67,7 @@ import { JwtModule } from '@nestjs/jwt'; // Asegúrate de importar JwtModule
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users,Recovery]),
     JwtModule.register({
       secret: 'tu_clave_secreta', // Reemplaza con tu clave secreta real
       signOptions: { expiresIn: '1h' }, // Opciones de firma del token

@@ -4,6 +4,7 @@ import { Users } from './dtos/user.dtos';
 import { EventPattern } from '@nestjs/microservices';
 import { CreateUserDto } from './dtos/create-user-dto';
 
+
 @Controller()
 export class AppController {
   private readonly logger = new Logger(AppController.name);
@@ -24,7 +25,7 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
-    ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
+   
     @EventPattern('update_pass_user')
     async handleUpdatePassUser(data: { oldpass: string, newpass: string, correo: string }) {
       const { oldpass, newpass, correo } = data;
@@ -37,18 +38,7 @@ export class AppController {
       }
     }
 
-
-
-
-
-
-
-    ///////////////////////////////////////// TEST UPDATE ////////////////////////////////////////////
-   
-
-    ///////////////////////////////////////// TEST JWT ////////////////////////////////////////////
-
-    @EventPattern('login_user1')
+    @EventPattern('login_user')
     async handleLoginUserTest(newUser: Partial<Users>) {
       if (newUser.correo && newUser.clave) {
         const { correo, clave } = newUser;
@@ -64,7 +54,64 @@ export class AppController {
         }
       }
     }
-    
+
+    @EventPattern('show_info_user')
+    async handleShowInfoUser(data: { correo: string }) {
+      const { correo } = data;
+      
+      if (correo) {
+        const resp = await this.appService.showInfoUser(correo)
+        return {
+          nombre: resp.nombre,
+          correo: resp.correo,
+        };
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+    /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+   
+    @EventPattern('return_code_user')
+    async handleRecoveryCodeUser(data: { correo: string }) {
+      const { correo } = data;
+      if(correo){
+        const resp = await this.appService.recoveryCode(correo)
+        return resp
+      }
+      return "no funciona";
+      
+    }
+
+    @EventPattern('confirm_pass_user')
+    async handleCorfirmCodeUser(data: { correo: string, code:string }) {
+      
+      const { correo,code } = data;
+      if(correo){
+        const resp = await this.appService.confirmCode(correo,code)
+        if(resp){
+          const token = this.appService.generate2AccessToken(correo);
+          return token
+        }
+        return ""
+      }
+      return "";
+      
+    }
+
+    @EventPattern('update_pass_user2')
+    async handleUpdatePassUser2(data: { newpass: string, correo: string }) {
+      const { newpass, correo } = data;
+      
+      if (newpass && correo) {
+        const resp = await this.appService.updatePassword2(correo,newpass)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+
+    /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+   
   
 }
 
