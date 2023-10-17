@@ -1,6 +1,6 @@
 import { Controller,Logger  } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Users } from './dtos/user.dtos';
+import { Users } from './dtos/entity/user.dtos';
 import { EventPattern } from '@nestjs/microservices';
 import { CreateUserDto } from './dtos/create-user-dto';
 
@@ -11,7 +11,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   
-    
+    /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
     @EventPattern('new_user_created')
     async handleNewUserCreated(newUser: Partial<Users>) {
       if (newUser.name && newUser.clave && newUser.correo) {
@@ -69,7 +69,7 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
-    /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+    
    
     @EventPattern('return_code_user')
     async handleRecoveryCodeUser(data: { correo: string }) {
@@ -109,8 +109,59 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
+    /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+    
+    @EventPattern('new_equipo_created')
+    async handleNewEquipoCreated(data: { nombre: string, correo: string }) {
+      const { nombre, correo } = data;
+      //console.log(data)
+      if (nombre && correo) {
+        const resp = await this.appService.createEquipos(nombre,correo)
+        return resp;
+      } else {
+        console.error('Falta INFO1.');
+      }
+    }
+
+    @EventPattern('show_info_equipo')
+    async handleShowInfoEquipo(data: { correo: string }) {
+      const { correo } = data;
+      
+      if (correo) {
+        const resp = await this.appService.showInfoEquipo(correo)
+        return resp
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+    
+    @EventPattern('update_name_equipo')
+    async handleUpdateNameEquipo(data: { oldName: string,newName: string, correo: string }) {
+      const { oldName,newName, correo } = data;
+      
+      if (oldName && newName && correo) {
+        const resp = await this.appService.updateNameEquipo(correo,newName,oldName)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+    @EventPattern('delete_name_equipo')
+    async handleDeleteNameEquipo(data: { name: string, correo: string }) {
+      const { name, correo } = data;
+      
+      if (name && correo) {
+        const resp = await this.appService.deleteNameEquipo(correo,name)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+
+
+    /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
    
   
 }

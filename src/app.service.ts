@@ -1,21 +1,23 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices'
-import { Users } from './dtos/user.dtos';
+import { Users } from './dtos/entity/user.dtos';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user-dto';
 
 import { JwtService } from '@nestjs/jwt';
-import { Recovery } from './dtos/recovery.dtos';
+import { Recovery } from './dtos/entity/recovery.dtos';
 import * as nodemailer from 'nodemailer';
-
+import { Equipos } from './dtos/entity/equipos.dtos';
+import e from 'express';
 @Injectable()
 export class AppService {
   constructor(@Inject('USERS_SERVICE') private client: ClientProxy,
   @InjectRepository(Users) private readonly userRepository: Repository<Users>,private readonly jwtService: JwtService,
+  @InjectRepository(Equipos) private readonly equipoRepository: Repository<Equipos>,
   @InjectRepository(Recovery) private readonly recoveryRepository: Repository<Recovery>){}
   
-  
+  /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user); // Espera a que se complete
@@ -69,12 +71,12 @@ export class AppService {
     const accessToken = this.jwtService.sign(payload, { expiresIn });
     return accessToken;
   }
-  /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+  
   async recoveryCode(correoT: string): Promise<string> {
    
     const codigo = Math.floor(1000 + Math.random() * 9000).toString();
     
-    // Configura Nodemailer
+    
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -136,12 +138,69 @@ export class AppService {
 
     return false;
   }
-  /////////////////////////////////////////////////////// RECUPERAR CONTRASEÑA ///////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
    
 
-
-
-
+  /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
   
+  async createEquipos(nombre: string,correo: string): Promise<boolean> {
+    const equipo = new Equipos();
+    equipo.name = nombre;
+    equipo.correoCreador = correo;
+    //console.log(equipo)
+    const savedEquipo = await this.equipoRepository.save(equipo);
+    console.log("asd",savedEquipo) 
+    if(savedEquipo){
+      return true;
+    }
+    
+    return false; 
+  }
+
+  async showInfoEquipo(correoT: string): Promise<{ nombre: string; correo: string }[] | null> {
+    const correoCreador = correoT;
+    const equipos = await this.equipoRepository.find({ where: { correoCreador } });
+  
+    if (equipos && equipos.length > 0) {
+      
+      return equipos.map((equipo) => ({ nombre: equipo.name, correo: equipo.correoCreador }));
+    }
+  
+    return null; 
+  }
+
+  async updateNameEquipo(correo: string,nuevoNombreEquipo: string,antiguoNombreEquipo: string): Promise<boolean> {
+    const correoCreador = correo;
+    const name = antiguoNombreEquipo;
+    const equipo = await this.equipoRepository.findOne({ where: { correoCreador,name } });
+    
+
+    if(equipo && equipo.correoCreador == correo && antiguoNombreEquipo == equipo.name){
+      equipo.name = nuevoNombreEquipo;
+      await this.equipoRepository.save(equipo);
+      
+      return true;
+    }
+    
+
+    return false;
+  }
+
+  async deleteNameEquipo(correo: string , nameEquipo:string): Promise<boolean> {
+    const correoCreador = correo;
+    const name = nameEquipo;
+    const equipo = await this.equipoRepository.findOne({ where: { correoCreador,name } });
+    console.log(equipo)
+
+    if(equipo && equipo.correoCreador == correo){
+      await this.equipoRepository.remove(equipo);
+      
+      return true;
+    }
+    
+
+    return false;
+  }
+  /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
   
 }
