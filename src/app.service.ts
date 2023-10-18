@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Recovery } from './dtos/entity/recovery.dtos';
 import * as nodemailer from 'nodemailer';
 import { Equipos } from './dtos/entity/equipos.dtos';
-import e from 'express';
 @Injectable()
 export class AppService {
   constructor(@Inject('USERS_SERVICE') private client: ClientProxy,

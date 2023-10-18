@@ -88,22 +88,20 @@ export class AppController {
       const { correo,code } = data;
       if(correo){
         const resp = await this.appService.confirmCode(correo,code)
-        if(resp){
-          const token = this.appService.generate2AccessToken(correo);
-          return token
-        }
-        return ""
+      
+        return resp
       }
-      return "";
+      return false;
       
     }
 
     @EventPattern('update_pass_user2')
     async handleUpdatePassUser2(data: { newpass: string, correo: string }) {
       const { newpass, correo } = data;
-      
+      console.log(data)
       if (newpass && correo) {
         const resp = await this.appService.updatePassword2(correo,newpass)
+        
         return resp;
       } else {
         console.error('Falta INFO.');
