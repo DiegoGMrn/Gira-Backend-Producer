@@ -9,12 +9,14 @@ import { JwtService } from '@nestjs/jwt';
 import { Recovery } from './dtos/entity/recovery.dtos';
 import * as nodemailer from 'nodemailer';
 import { Equipos } from './dtos/entity/equipos.dtos';
+import { EquipoIntegranteRol } from './dtos/entity/equipoIntegranteRol.dto';
 @Injectable()
 export class AppService {
   constructor(@Inject('USERS_SERVICE') private client: ClientProxy,
   @InjectRepository(Users) private readonly userRepository: Repository<Users>,private readonly jwtService: JwtService,
   @InjectRepository(Equipos) private readonly equipoRepository: Repository<Equipos>,
-  @InjectRepository(Recovery) private readonly recoveryRepository: Repository<Recovery>){}
+  @InjectRepository(Recovery) private readonly recoveryRepository: Repository<Recovery>,
+  @InjectRepository(EquipoIntegranteRol) private readonly equipoIntegranteRolRepository: Repository<EquipoIntegranteRol>){}
   
   /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
   async create(createUserDto: CreateUserDto) {
@@ -200,6 +202,38 @@ export class AppService {
 
     return false;
   }
+
+  async agregarIntegrante(nombreE: string, correoI: string, correoT: string): Promise<boolean> {
+    //const equipoRepository = this.equipoRepository(Equipos);
+    //const integrantesRepository = this.(Integrantes);
+    //const rolesRepository = getRepository(Roles);
+  
+    const nombreEquipo = nombreE;
+    const correoIntegrante = correoI;
+    const correoCreador = correoT;
+  
+    // Encuentra el equipo por correoCreador y nombre
+    const equipo = await this.equipoRepository.findOne({ where: { correoCreador, name: nombreEquipo } });
+    const existeCorreoIntegrante = await this.userRepository.findOne({ where: {correo:correoI } });
+    
+    if (existeCorreoIntegrante && equipo) {
+      
+          const equipoIntegranteRol = new EquipoIntegranteRol();
+          equipoIntegranteRol.equipo = equipo;
+          equipoIntegranteRol.correoIntegrante = correoIntegrante;
+          
+  
+          // Guarda la instancia en la base de datos
+          await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
+  
+          return true;
+        }
+        return false;
+      }
+    
+  
+    
+  
   /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
   
 }

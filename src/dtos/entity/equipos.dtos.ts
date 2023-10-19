@@ -3,12 +3,13 @@ import { EquipoIntegranteRol } from "./equipoIntegranteRol.dto";
 
 @Entity()
 export class Equipos {
+  
   @PrimaryGeneratedColumn()
   idEquipos: number;
-
+  
   @Column()
   name: string;
-
+  
   @Column({ nullable: true })
   proyecto: string;
 

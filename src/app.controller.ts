@@ -157,6 +157,17 @@ export class AppController {
         console.error('Falta INFO.');
       }
     }
+    @EventPattern('agregar_integrante')
+    async handleAgregarIntegrante(data: { nombreEquipo: string, correoIntegrante: string,correo: string }) {
+      const { nombreEquipo, correoIntegrante,correo } = data;
+      
+      if (nombreEquipo && correoIntegrante) {
+        const resp = await this.appService.agregarIntegrante(nombreEquipo,correoIntegrante,correo)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
 
 
     /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////

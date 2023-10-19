@@ -7,7 +7,7 @@ import { Users } from './dtos/entity/user.dtos';
 import { Recovery } from './dtos/entity/recovery.dtos';
 import { JwtModule } from '@nestjs/jwt'; // Asegúrate de importar JwtModule
 import { Equipos } from './dtos/entity/equipos.dtos';
-import { Integrantes } from './dtos/entity/integrantes.dtos';
+//import { Integrantes } from './dtos/entity/integrantes.dtos';
 import { EquipoIntegranteRol } from './dtos/entity/equipoIntegranteRol.dto';
 import { Roles } from './dtos/entity/roles.dtos';
 
@@ -36,7 +36,7 @@ import { Roles } from './dtos/entity/roles.dtos';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Users,Recovery,Equipos,Integrantes,EquipoIntegranteRol,Roles]),
+    TypeOrmModule.forFeature([Users,Recovery,Equipos,EquipoIntegranteRol,Roles/*,Integrantes*/]),
     JwtModule.register({
       secret: 'tu_clave_secreta', // Reemplaza con tu clave secreta real
       signOptions: { expiresIn: '1h' }, // Opciones de firma del token
