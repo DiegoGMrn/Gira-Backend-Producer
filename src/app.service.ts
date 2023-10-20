@@ -20,10 +20,18 @@ export class AppService {
   
   /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
   async create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
-    const savedUser = await this.userRepository.save(user); // Espera a que se complete
-    console.log(savedUser)
-    return savedUser; // Devuelve el usuario guardado
+    
+    
+    const usuarioBuscado = await this.userRepository.findOne({ where: { correo:createUserDto.correo } });
+    if(usuarioBuscado){
+      return false
+    }else{
+      const user = this.userRepository.create(createUserDto);
+      await this.userRepository.save(user); // Espera a que se complete
+      return true; 
+
+    }
+    
   }
  
    async updatePassword(correo: string, claveAntigua: string, nuevaClave: string,): Promise<boolean> {
@@ -204,9 +212,7 @@ export class AppService {
   }
 
   async agregarIntegrante(nombreE: string, correoI: string, correoT: string): Promise<boolean> {
-    //const equipoRepository = this.equipoRepository(Equipos);
-    //const integrantesRepository = this.(Integrantes);
-    //const rolesRepository = getRepository(Roles);
+    
   
     const nombreEquipo = nombreE;
     const correoIntegrante = correoI;

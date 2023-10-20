@@ -13,16 +13,18 @@ export class AppController {
   
     /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
     @EventPattern('new_user_created')
-    async handleNewUserCreated(newUser: Partial<Users>) {
+    async handleNewUserCreated(newUser: Partial<Users>): Promise<boolean> {
       if (newUser.name && newUser.clave && newUser.correo) {
         const createUserDto: CreateUserDto = {
           name: newUser.name,
           clave: newUser.clave,
           correo: newUser.correo,
         };
-        await this.appService.create(createUserDto);
+        const resp =await this.appService.create(createUserDto);
+        
+        return resp;
       } else {
-        console.error('Falta INFO.');
+        return false;
       }
     }
    
