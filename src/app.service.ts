@@ -166,13 +166,13 @@ export class AppService {
     return false; 
   }
 
-  async showInfoEquipo(correoT: string): Promise<{ nombre: string; correo: string }[] | null> {
+  async showInfoEquipo(correoT: string): Promise<{ id: number,nombre: string; correo: string }[] | null> {
     const correoCreador = correoT;
     const equipos = await this.equipoRepository.find({ where: { correoCreador } });
   
     if (equipos && equipos.length > 0) {
       
-      return equipos.map((equipo) => ({ nombre: equipo.name, correo: equipo.correoCreador }));
+      return equipos.map((equipo) => ({ id: equipo.idEquipos,nombre: equipo.name, correo: equipo.correoCreador }));
     }
   
     return null; 
