@@ -220,20 +220,25 @@ export class AppService {
   
     // Encuentra el equipo por correoCreador y nombre
     const equipo = await this.equipoRepository.findOne({ where: { correoCreador, name: nombreEquipo } });
+    const idEquipo = equipo.idEquipos;
     const existeCorreoIntegrante = await this.userRepository.findOne({ where: {correo:correoI } });
-    
-    if (existeCorreoIntegrante && equipo) {
+    const existeIntegrante = await this.equipoIntegranteRolRepository.findOne({where:{correoIntegrante,equipo:{idEquipos:idEquipo}}})
+    if(!existeIntegrante){
+      if (existeCorreoIntegrante && equipo ) {
       
-          const equipoIntegranteRol = new EquipoIntegranteRol();
-          equipoIntegranteRol.equipo = equipo;
-          equipoIntegranteRol.correoIntegrante = correoIntegrante;
-          
-  
-          // Guarda la instancia en la base de datos
-          await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
-  
-          return true;
-        }
+        const equipoIntegranteRol = new EquipoIntegranteRol();
+        equipoIntegranteRol.equipo = equipo;
+        equipoIntegranteRol.correoIntegrante = correoIntegrante;
+        
+
+        
+        await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
+
+        return true;
+      }
+
+    }
+    
         return false;
       }
     
