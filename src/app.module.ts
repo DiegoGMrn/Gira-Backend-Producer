@@ -38,7 +38,7 @@ import { Roles } from './dtos/entity/roles.dtos';
     }),
     TypeOrmModule.forFeature([Users,Recovery,Equipos,EquipoIntegranteRol,Roles/*,Integrantes*/]),
     JwtModule.register({
-      secret: 'tu_clave_secreta', // Reemplaza con tu clave secreta real
+      secret: 'tu_clave_secreta', // Remplaza con tu clave secreta real
       signOptions: { expiresIn: '1h' }, // Opciones de firma del token
     }),
   ],
