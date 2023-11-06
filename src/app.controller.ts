@@ -171,7 +171,13 @@ export class AppController {
       }
     }
 
-
+    @EventPattern('mostrar_integrantes_equipo')
+    async handleMostrarIntegrantesEquipo(data: { correo: string,nombreEquipo: string }) {
+      
+      const resp = await this.appService.mostrarIntegrantes(data.correo,data.nombreEquipo)
+      
+      return resp;
+    }
     /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
    
   

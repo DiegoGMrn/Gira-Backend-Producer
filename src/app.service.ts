@@ -212,39 +212,48 @@ export class AppService {
   }
 
   async agregarIntegrante(nombreE: string, correoI: string, correoT: string): Promise<boolean> {
-    
-  
     const nombreEquipo = nombreE;
     const correoIntegrante = correoI;
     const correoCreador = correoT;
-  
-    // Encuentra el equipo por correoCreador y nombre
     const equipo = await this.equipoRepository.findOne({ where: { correoCreador, name: nombreEquipo } });
     const idEquipo = equipo.idEquipos;
     const existeCorreoIntegrante = await this.userRepository.findOne({ where: {correo:correoI } });
     const existeIntegrante = await this.equipoIntegranteRolRepository.findOne({where:{correoIntegrante,equipo:{idEquipos:idEquipo}}})
     if(!existeIntegrante){
       if (existeCorreoIntegrante && equipo ) {
-      
         const equipoIntegranteRol = new EquipoIntegranteRol();
         equipoIntegranteRol.equipo = equipo;
         equipoIntegranteRol.correoIntegrante = correoIntegrante;
-        
-
-        
         await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
-
         return true;
       }
-
     }
-    
         return false;
       }
     
   
     
-  
+  async mostrarIntegrantes(correo: string,nombreEquipo:string): Promise<{ nombre: string; correo: string }[] | null> {
+    const equipo = await this.equipoRepository.findOne({ where: { name: nombreEquipo } });
+    const idEquipo = equipo.idEquipos;
+        
+    const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo } });
+    const integrantesConNombres: { nombre: string; correo: string }[] = [];
+
+    for (const integrante of integrantes) {
+        
+        const usuario = await this.userRepository.findOne({ where: { correo: integrante.correoIntegrante } });
+
+        if (usuario) {
+            integrantesConNombres.push({
+                nombre: usuario.name, 
+                correo: integrante.correoIntegrante
+            });
+        }
+    }
+
+    return integrantesConNombres;
+    }
   /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
   
 }

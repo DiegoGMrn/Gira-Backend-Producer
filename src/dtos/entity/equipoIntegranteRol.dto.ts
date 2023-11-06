@@ -12,15 +12,19 @@ export class EquipoIntegranteRol {
   @JoinColumn()
   equipo?: Equipos;
 
-  /*
-  @ManyToOne(() => Integrantes, integrante => integrante.equipoIntegrantes)
-  @JoinColumn()
-  integrante?: Integrantes;
-  */
+  
   @Column()
   correoIntegrante: string;
+
+  @Column()
+  equipoIdEquipos: number;
 
   @ManyToOne(() => Roles, rol => rol.equipoIntegrantes)
   @JoinColumn()
   rol?:Roles;
 }
+/*
+  @ManyToOne(() => Integrantes, integrante => integrante.equipoIntegrantes)
+  @JoinColumn()
+  integrante?: Integrantes;
+  */
