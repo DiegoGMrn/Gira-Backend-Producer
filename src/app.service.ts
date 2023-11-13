@@ -156,9 +156,15 @@ export class AppService {
     const equipo = new Equipos();
     equipo.name = nombre;
     equipo.correoCreador = correo;
-    //console.log(equipo)
+    
+
     const savedEquipo = await this.equipoRepository.save(equipo);
-    console.log("asd",savedEquipo) 
+
+    const equipoIntegranteRol = new EquipoIntegranteRol();
+    equipoIntegranteRol.correoIntegrante=correo
+    equipoIntegranteRol.equipoIdEquipos=savedEquipo.idEquipos
+    await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
+    
     if(savedEquipo){
       return true;
     }
@@ -236,7 +242,7 @@ export class AppService {
   async mostrarIntegrantes(correo: string,nombreEquipo:string): Promise<{ nombre: string; correo: string }[] | null> {
     const equipo = await this.equipoRepository.findOne({ where: { name: nombreEquipo } });
     const idEquipo = equipo.idEquipos;
-        
+     
     const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo } });
     const integrantesConNombres: { nombre: string; correo: string }[] = [];
 
@@ -254,6 +260,9 @@ export class AppService {
 
     return integrantesConNombres;
     }
+
+
+  
   /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
   
 }

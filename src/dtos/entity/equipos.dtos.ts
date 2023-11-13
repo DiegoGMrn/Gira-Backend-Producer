@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
 import { EquipoIntegranteRol } from "./equipoIntegranteRol.dto";
 
 @Entity()
@@ -16,6 +16,7 @@ export class Equipos {
   @Column()
   correoCreador: string;
 
-  @OneToMany(() => EquipoIntegranteRol, equipoIntegrante => equipoIntegrante.equipo)
+  @OneToMany(() => EquipoIntegranteRol, equipoIntegrante => equipoIntegrante.equipo, { cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'equipoIdEquipos' }) // Agrega esto si es necesario para la relación
   equipoIntegrantes?: EquipoIntegranteRol[];
 }
