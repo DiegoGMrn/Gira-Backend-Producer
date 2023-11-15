@@ -4,7 +4,7 @@ import { Users } from './dtos/entity/user.dtos';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user-dto';
-
+import { Roles } from './dtos/entity/roles.dtos';
 import { JwtService } from '@nestjs/jwt';
 import { Recovery } from './dtos/entity/recovery.dtos';
 import * as nodemailer from 'nodemailer';
@@ -17,7 +17,7 @@ export class AppService {
   @InjectRepository(Equipos) private readonly equipoRepository: Repository<Equipos>,
   @InjectRepository(Recovery) private readonly recoveryRepository: Repository<Recovery>,
   @InjectRepository(EquipoIntegranteRol) private readonly equipoIntegranteRolRepository: Repository<EquipoIntegranteRol>){}
-  
+
   /////////////////////////////////////////////////////// USUARIOS ///////////////////////////////////////////////////////
   async create(createUserDto: CreateUserDto) {
     
@@ -243,17 +243,17 @@ export class AppService {
     const equipo = await this.equipoRepository.findOne({ where: { name: nombreEquipo } });
     const idEquipo = equipo.idEquipos;
      
-    const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo } });
-    const integrantesConNombres: { nombre: string; correo: string }[] = [];
+    const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo }, relations: ['rol'] });
+    const integrantesConNombres: { nombre: string; correo: string; rol: string }[] = [];
 
     for (const integrante of integrantes) {
         
         const usuario = await this.userRepository.findOne({ where: { correo: integrante.correoIntegrante } });
-
         if (usuario) {
             integrantesConNombres.push({
                 nombre: usuario.name, 
-                correo: integrante.correoIntegrante
+                correo: integrante.correoIntegrante,
+                rol: integrante.rol?.name || 'Sin rol',
             });
         }
     }
