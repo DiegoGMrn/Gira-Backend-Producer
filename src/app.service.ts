@@ -174,11 +174,21 @@ export class AppService {
 
   async showInfoEquipo(correoT: string): Promise<{ id: number,nombre: string; correo: string }[] | null> {
     const correoCreador = correoT;
-    const equipos = await this.equipoRepository.find({ where: { correoCreador } });
+    const equipos = await this.equipoRepository.find({ where: { correoCreador }, relations: ['equipoIntegrantes'] });
   
     if (equipos && equipos.length > 0) {
-      
-      return equipos.map((equipo) => ({ id: equipo.idEquipos,nombre: equipo.name, correo: equipo.correoCreador }));
+      const equiposConInfo: { id: number, nombre: string; correo: string; cantidadMiembros: number }[] = [];
+      for (const equipo of equipos) {
+        const cantidadMiembros = equipo.equipoIntegrantes ? equipo.equipoIntegrantes.length : 0;
+
+        equiposConInfo.push({
+          id: equipo.idEquipos,
+          nombre: equipo.name,
+          correo: equipo.correoCreador,
+          cantidadMiembros,
+        });
+      }
+      return equiposConInfo;
     }
   
     return null; 
