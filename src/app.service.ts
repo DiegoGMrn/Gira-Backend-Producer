@@ -271,6 +271,28 @@ export class AppService {
     return integrantesConNombres;
     }
 
+    async showInfoEquipoProyecto(idEquipo: string): Promise<{ id: number,nombre: string; correo: string }[] | null> {
+      const idEquipos: number = +idEquipo;
+      const equipos = await this.equipoRepository.find({ where: { idEquipos }, relations: ['equipoIntegrantes'] });
+    
+      if (equipos && equipos.length > 0) {
+        const equiposConInfo: { id: number, nombre: string; correo: string; cantidadMiembros: number }[] = [];
+        for (const equipo of equipos) {
+          const cantidadMiembros = equipo.equipoIntegrantes ? equipo.equipoIntegrantes.length : 0;
+  
+          equiposConInfo.push({
+            id: equipo.idEquipos,
+            nombre: equipo.name,
+            correo: equipo.correoCreador,
+            cantidadMiembros,
+          });
+        }
+        return equiposConInfo;
+      }
+    
+      return null; 
+    }
+
 
   
   /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////

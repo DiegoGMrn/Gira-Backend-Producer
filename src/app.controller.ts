@@ -179,6 +179,18 @@ export class AppController {
       return resp;
     }
 
+    @EventPattern('show_info_equipo_proyecto')
+    async handleShowInfoEquipoProyecto(data: { idEquipo: string }) {
+      const { idEquipo } = data;
+      
+      if (idEquipo) {
+        const resp = await this.appService.showInfoEquipoProyecto(idEquipo)
+        return resp
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+
     
     /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
    
