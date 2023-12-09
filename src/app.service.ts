@@ -293,6 +293,19 @@ export class AppService {
       return null; 
     }
 
+    async agregarRol(correoI: string, equipoI: number, idR: number): Promise<boolean> {
+      const correoIntegrante = correoI;
+      const equipoId = equipoI;
+      const idRol = idR;
+
+      const equipoIdRol = await this.equipoIntegranteRolRepository.findOne({ where: { correoIntegrante,equipoIdEquipos:equipoId} });
+      if(equipoIdRol){
+        equipoIdRol.rolIdRoles=idR;
+        await this.equipoIntegranteRolRepository.save(equipoIdRol);
+      }
+      return true;
+    }
+
 
   
   /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////

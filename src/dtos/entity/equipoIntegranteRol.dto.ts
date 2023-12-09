@@ -42,6 +42,9 @@ export class EquipoIntegranteRol {
   @Column({ name: 'equipoIdEquipos' })
   equipoIdEquipos: number;
 
+  @Column({ name: 'rolIdRoles' })
+  rolIdRoles: number;
+
   @ManyToOne(() => Roles, rol => rol.equipoIntegrantes)
   @JoinColumn()
   rol?: Roles;

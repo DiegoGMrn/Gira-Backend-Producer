@@ -191,6 +191,18 @@ export class AppController {
       }
     }
 
+    @EventPattern('agregar_rol')
+    async handleRolIntegrante(data: { correoIntegrante: string, equipoId: number,idRol: number }) {
+      const { correoIntegrante, equipoId,idRol } = data;
+      
+      if (correoIntegrante) {
+        const resp = await this.appService.agregarRol(correoIntegrante,equipoId,idRol)
+        return resp;
+      } else {
+        console.error('Falta INFO.');
+      }
+    }
+
     
     /////////////////////////////////////////////////////// EQUIPOS ///////////////////////////////////////////////////////
    
