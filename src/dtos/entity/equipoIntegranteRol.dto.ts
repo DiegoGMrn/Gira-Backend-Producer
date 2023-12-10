@@ -21,11 +21,11 @@ export class EquipoIntegranteRol {
   @ManyToOne(() => Roles, rol => rol.equipoIntegrantes)
   @JoinColumn()
   rol?: Roles;
-}
-*/
+}*/
+
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column } from "typeorm";
 import { Equipos } from "./equipos.dtos";
-import { Roles } from "./roles.dtos";
+//import { Roles } from "./roles.dtos";
 
 @Entity()
 export class EquipoIntegranteRol {
@@ -42,10 +42,12 @@ export class EquipoIntegranteRol {
   @Column({ name: 'equipoIdEquipos' })
   equipoIdEquipos: number;
 
-  @Column({ name: 'rolIdRoles' })
-  rolIdRoles: number;
-
+  
+  @Column({ name: 'rolIdRoles' , nullable: true })
+  rolIdRoles?: number | null;
+  
+  /*
   @ManyToOne(() => Roles, rol => rol.equipoIntegrantes)
   @JoinColumn()
-  rol?: Roles;
+  rol?: Roles;*/
 }

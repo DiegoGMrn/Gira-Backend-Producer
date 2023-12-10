@@ -4,7 +4,7 @@ import { Users } from './dtos/entity/user.dtos';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user-dto';
-import { Roles } from './dtos/entity/roles.dtos';
+//import { Roles } from './dtos/entity/roles.dtos';
 import { JwtService } from '@nestjs/jwt';
 import { Recovery } from './dtos/entity/recovery.dtos';
 import * as nodemailer from 'nodemailer';
@@ -164,7 +164,6 @@ export class AppService {
     equipoIntegranteRol.correoIntegrante=correo
     equipoIntegranteRol.equipoIdEquipos=savedEquipo.idEquipos
     await this.equipoIntegranteRolRepository.save(equipoIntegranteRol);
-    
     if(savedEquipo){
       return true;
     }
@@ -253,8 +252,9 @@ export class AppService {
     const equipo = await this.equipoRepository.findOne({ where: { name: nombreEquipo } });
     const idEquipo = equipo.idEquipos;
      
-    const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo }, relations: ['rol'] });
-    const integrantesConNombres: { nombre: string; correo: string; rol: string }[] = [];
+    //const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo }, relations: ['rol'] });
+    const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo } });
+    const integrantesConNombres: { nombre: string; correo: string}[] = [];
 
     for (const integrante of integrantes) {
         
@@ -263,7 +263,7 @@ export class AppService {
             integrantesConNombres.push({
                 nombre: usuario.name, 
                 correo: integrante.correoIntegrante,
-                rol: integrante.rol?.name || 'Sin rol',
+                //rol: integrante.rol?.name || 'Sin rol',
             });
         }
     }
@@ -300,7 +300,7 @@ export class AppService {
 
       const equipoIdRol = await this.equipoIntegranteRolRepository.findOne({ where: { correoIntegrante,equipoIdEquipos:equipoId} });
       if(equipoIdRol){
-        equipoIdRol.rolIdRoles=idR;
+        equipoIdRol.rolIdRoles=idRol;
         await this.equipoIntegranteRolRepository.save(equipoIdRol);
       }
       return true;

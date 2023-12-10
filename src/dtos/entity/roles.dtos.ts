@@ -1,4 +1,4 @@
-import { Entity, Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
+/*import { Entity, Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
 import { EquipoIntegranteRol } from "./equipoIntegranteRol.dto";
 
 @Entity()
@@ -14,4 +14,4 @@ export class Roles {
   @OneToMany(() => EquipoIntegranteRol, equipoIntegrante => equipoIntegrante.rol)
   equipoIntegrantes?: EquipoIntegranteRol[];
 
-}
+}*/

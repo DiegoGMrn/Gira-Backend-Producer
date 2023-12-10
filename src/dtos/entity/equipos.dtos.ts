@@ -17,6 +17,6 @@ export class Equipos {
   correoCreador: string;
 
   @OneToMany(() => EquipoIntegranteRol, equipoIntegrante => equipoIntegrante.equipo, { cascade: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'equipoIdEquipos' }) // Agrega esto si es necesario para la relación
+  @JoinColumn(/*{ name: 'equipoIdEquipos' }*/) // Agrega esto si es necesario para la relación
   equipoIntegrantes?: EquipoIntegranteRol[];
 }
