@@ -252,7 +252,7 @@ export class AppService {
     const equipo = await this.equipoRepository.findOne({ where: { name: nombreEquipo } });
     const idEquipo = equipo.idEquipos;
      
-    //const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo }, relations: ['rol'] });
+    
     const integrantes = await this.equipoIntegranteRolRepository.find({ where: { equipoIdEquipos: idEquipo } });
     const integrantesConNombres: { nombre: string; correo: string}[] = [];
 
@@ -263,7 +263,7 @@ export class AppService {
             integrantesConNombres.push({
                 nombre: usuario.name, 
                 correo: integrante.correoIntegrante,
-                //rol: integrante.rol?.name || 'Sin rol',
+                
             });
         }
     }
